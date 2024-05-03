@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <meta charset="utf-8">
+    <title>IceCream</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 20px;
+            padding: 20px; /* Added spacing */
+        }
+        
+        form {
+            text-align: center;
+        }
+
+        .toppings-container {
+            border: 2px solid black;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Adjusted to space between */
+            width: 100%; /* Added width for better layout */
+            margin-top: 20px; /* Added spacing */
+        }
+
+        .topping-checkbox {
+            margin: 5px;
+        }
+
+        .topping-column {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <div class="mb-3">
+            <label for="scoops">Number of scoops:</label>
+            <input type="text" id="scoops" name="scoops" required>
+        </div>
+        <div class="type" style="margin-top: 20px;">
+            <input class="form-check-input" type="radio" name="type" id="type_radio1" value="cone">
+            <label class="form-check-label" for="type_radio1">
+                Cone
+            </label>
+            <input class="form-check-input" type="radio" name="type" id="type_radio2" value="cup">
+            <label class="form-check-label" for="type_radio2">
+                Cup
+            </label>
+        </div>
+        <div class="toppings-container" style="display: none;">
+            <label for="toppings-container">Toppings:</label><br>
+            <div class="topping-column">
+                <input class="topping-checkbox" type="checkbox" id="hot_fudge" name="toppings" value="hot_fudge" data-price="1.25">
+                <label for="hot_fudge">Hot Fudge ($1.25)</label><br>
+                <input class="topping-checkbox" type="checkbox" id="sprinkles" name="toppings" value="sprinkles" data-price=".50">
+                <label for="sprinkles">Sprinkles ($.50)</label><br>
+            </div>
+            <div class="topping-column">
+                <input class="topping-checkbox" type="checkbox" id="whipped_cream" name="toppings" value="whipped_cream" data-price=".25">
+                <label for="whipped_cream">Whipped Cream ($.25)</label><br>
+                <input class="topping-checkbox" type="checkbox" id="cherry" name="toppings" value="cherry" data-price=".25">
+                <label for="cherry">Cherry ($.25)</label><br>
+            </div>
+        </div>
+        <div class="totals" style="margin-top: 20px;">
+            <p id="base-total">Base Total: $0.00</p>
+            <p id="tax">Tax (5.3%): $0.00</p>
+            <p id="total">Total: $0.00</p>
+        </div>
+
+    </form>
+
+    <script>
+        function showToppings() {
+            let coneRadio = document.getElementById("type_radio1");
+            let cupRadio = document.getElementById("type_radio2");
+            let toppingsContainer = document.querySelector(".toppings-container");
+            if (cupRadio.checked) {
+                toppingsContainer.style.display = "block"; // Show the toppings container
+            } 
+            else {
+                toppingsContainer.style.display = "none"; // Hide the toppings container
+            }
+        }
+
+        function calculateBaseTotal() {
+            const selectedToppings = document.querySelectorAll('input[name="toppings"]:checked');
+            let totalPrice = 0;
+
+            // Loop through selected toppings and add their prices
+            selectedToppings.forEach(topping => {
+                totalPrice += parseFloat(topping.dataset.price);
+            });
+
+            
+            return totalPrice;
+        }
+
+        function calculateTax() {
+            const baseTotal = calculateBaseTotal()
+            let tax = baseTotal * .053
+            return tax;
+        }
+
+        function calculateTotal() {
+            let baseTotal = calculateBaseTotal()
+            let tax = calculateTax()
+            let total = baseTotal + tax;
+            return total;
+        }
+
+
+        document.getElementById("type_radio1").addEventListener("click", showToppings);
+        document.getElementById("type_radio2").addEventListener("click", showToppings);
+    </script>
+</body>
